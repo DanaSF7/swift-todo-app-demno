@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var todos = [
-        Todo(title: "Feed the cat"),
+        Todo(title: "Feed the chat"),
         Todo(title: "Buy groceries", subtitle: "Bananas,eggs,milk,potatoes"),
         Todo(title: "Finish project"),
         Todo(title: "Call mom", isCompleted: true),
@@ -20,24 +20,32 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             List ($todos) { $todo in //binding; free to change
-                HStack {
-                    Image(systemName: todo.isCompleted ? "checkmark.circle.fill" : "circle" )
-                        .onTapGesture {
-                            todo.isCompleted.toggle()
-                        }
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text(todo.title)
-                            .strikethrough(todo.isCompleted)
-                        if !todo.subtitle.isEmpty{
-                            Text(todo.subtitle)
-                                .font(.caption)
-                                .foregroundColor(.gray)
+                NavigationLink {
+                    // The View to open when tapped
+                    TodoDetailView(todo: $todo)
+                    
+                }label:{
+                    // Howthe link appears visually
+                    
+                    HStack {
+                        Image(systemName: todo.isCompleted ? "checkmark.circle.fill" : "circle" )
+                            .onTapGesture {
+                                todo.isCompleted.toggle()
+                            }
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text(todo.title)
                                 .strikethrough(todo.isCompleted)
-                            
+                            if !todo.subtitle.isEmpty{
+                                Text(todo.subtitle)
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                                    .strikethrough(todo.isCompleted)
+                                
+                            }
                         }
                     }
+                    .navigationTitle("Todos")
                 }
-                .navigationTitle("Todos")
             }
         }
     }

@@ -17,9 +17,10 @@ struct ContentView: View {
         Todo(title: "Go for a run",subtitle: "2km"),
         Todo (title: "Read a book")
     ]
+    @State private var showSheet = false
     var body: some View {
         NavigationStack {
-            List ($todos) { $todo in //binding; free to change
+            List($todos, editActions: [.all]) { $todo in //binding; free to change
                 NavigationLink {
                     // The View to open when tapped
                     TodoDetailView(todo: $todo)
@@ -44,15 +45,36 @@ struct ContentView: View {
                             }
                         }
                     }
-                    .navigationTitle("Todos")
+                }
+            }
+            .navigationTitle("Todos")
+            .toolbar{
+                ToolbarItem(placement: .navigationBarLeading) {
+                    
+                    EditButton()
+                }
+            
+            ToolbarItem(placement: .navigationBarTrailing){
+                Button{
+                    showSheet = true
+                }label: {
+                    Image(systemName: "plus")
                 }
             }
         }
-    }
-    
-    struct ContentView_Previews: PreviewProvider {
-        static var previews: some View {
-            ContentView()
+            
+            .sheet(isPresented: $showSheet) {
+                NewTodoView(sourceArray: $todos)
+                    .presentationDetents([.medium])
+            }
         }
     }
 }
+
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+

@@ -21,31 +21,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             List($todos, editActions: [.all]) { $todo in //binding; free to change
-                NavigationLink {
-                    // The View to open when tapped
-                    TodoDetailView(todo: $todo)
-                    
-                }label:{
-                    // Howthe link appears visually
-                    
-                    HStack {
-                        Image(systemName: todo.isCompleted ? "checkmark.circle.fill" : "circle" )
-                            .onTapGesture {
-                                todo.isCompleted.toggle()
-                            }
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text(todo.title)
-                                .strikethrough(todo.isCompleted)
-                            if !todo.subtitle.isEmpty{
-                                Text(todo.subtitle)
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                                    .strikethrough(todo.isCompleted)
-                                
-                            }
-                        }
-                    }
-                }
+                TodoRowView(todo: $todo)
             }
             .navigationTitle("Todos")
             .toolbar{
@@ -77,4 +53,5 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
 
